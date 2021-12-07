@@ -1,6 +1,8 @@
 import pygame
 import os
-from random import *
+import random
+from pygame import image ## 기존과 다르게 랜덤 추가
+
 ##################################################################
 
 # 1. 사용자 게임 초기화 (배경 화면, 게임 이미지, 좌표, 속도, 폰트 등)
@@ -9,21 +11,20 @@ image_path = os.path.join(current_path, "images") # images 폴더 위치 반환
 level=1
 score=0
 ranking=[]
-n=0
+#n=0
 shot=1
 shield=0
 def Level1():
     current_path=os.path.dirname(__file__)
     image_path=os.path.join(current_path,"images")
 
-
     global level
     global score
     global ranking
-    global rankingname
-    global n
+    #global n
     global shot
     global shield
+
 
     # 배경 만들기
     background=pygame.image.load(os.path.join(image_path,"background.jpg"))
@@ -58,14 +59,26 @@ def Level1():
     weapon_speed = 10
 
     # 공 만들기 (4개 크기에 대해 따로 처리)
+    ball_size1 = ["balloon1.png", "green_ball1.png", "blue_ball1.png", "yellow_ball1.png", "purple_ball1.png"]
+    ball_size2 = ["balloon2.png", "green_ball2.png", "blue_ball2.png", "yellow_ball2.png", "purple_ball2.png"]
+    ball_size3 = ["balloon3.png", "green_ball3.png", "blue_ball3.png", "yellow_ball3.png", "purple_ball3.png"]
+    ball_size4 = ["balloon4.png", "green_ball4.png", "blue_ball4.png", "yellow_ball4.png", "purple_ball4.png"]
+
+    choiceBall1 = random.choice(ball_size1)
+    choiceBall2 = random.choice(ball_size2)
+    choiceBall3 = random.choice(ball_size3)
+    choiceBall4 = random.choice(ball_size4)
+
+    # 공 크기별 랜덤 이미지 적용
     ball_images = [
-    pygame.image.load(os.path.join(image_path, "ball1_1.png")),
-    pygame.image.load(os.path.join(image_path, "ball2_1.png")),
-    pygame.image.load(os.path.join(image_path, "ball3_1.png")),
-    pygame.image.load(os.path.join(image_path, "ball4_1.png"))]
+        pygame.image.load(os.path.join(image_path,  choiceBall1)),
+        pygame.image.load(os.path.join(image_path,  choiceBall2)),
+        pygame.image.load(os.path.join(image_path,  choiceBall3)),
+        pygame.image.load(os.path.join(image_path,  choiceBall4))
+    ]
 
     # 공 크기에 따른 최초 스피드
-    ball_speed_y=[-18,-15,-12,-9]
+    ball_speed_y=[-20,-18,-15,-12]
 
     #공들
     balls=[]
@@ -110,7 +123,7 @@ def Level1():
                 elif event.key == pygame.K_RIGHT:
                     character_to_x_RIGHT+=character_speed
                 elif event.key == pygame.K_SPACE:
-                    att_sound = pygame.mixer.Sound("C:/Users/Administrator/Desktop/Pang_Game/attack.mp3")
+                    att_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/attack.mp3")
                     att_sound.play()
 
                     if len(weapons) <shot:
@@ -185,7 +198,7 @@ def Level1():
 
             # 공과 캐릭터 충돌 처리
             if character_rect.colliderect(ball_rect):
-                fail_sound = pygame.mixer.Sound("C:/Users/Administrator/Desktop/Pang_Game/fail_pang.mp3")
+                fail_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/fail_pang.mp3")
                 fail_sound.play()
                 if shield==1:
                     game_result="Try Again!"
@@ -203,7 +216,7 @@ def Level1():
                     ranking.append(score)
                     ranking.append(input("이름을 입력하세요 : "))
                     score=0
-                    n+=1
+                    #n+=1
                     shot=1
                     running =False
                     break
@@ -219,7 +232,7 @@ def Level1():
                 weapon_rect.top=weapon_y_pos
 
                 if weapon_rect.colliderect(ball_rect):
-                    pang_sound = pygame.mixer.Sound("C:/Users/Administrator/Desktop/Pang_Game/pang.mp3")
+                    pang_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/pang.mp3")
                     pang_sound.play()
                     if ball_img_idx==3:
                             score+=40
@@ -279,6 +292,8 @@ def Level1():
         # 모든 공을 없앤 경우 게임 종료 (성공)
         if len(balls)==0:
             if level<4:
+                success_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/success.mp3")
+                success_sound.play()
                 game_result="Next Level"
                 msg=game_font.render(game_result,True,(255,255,0))
                 msg_rect=msg.get_rect(center=(int(screen_width/2),int(screen_height/2)))
@@ -288,7 +303,6 @@ def Level1():
                 shot=1
                 score+=int(total_time-elapsed_time)
                 running=False
-
             else:
                 game_result="Mission Complete"
                 msg=game_font.render(game_result,True,(255,255,0))
@@ -300,7 +314,7 @@ def Level1():
                 ranking.append("***"+str(score)+"***")
                 ranking.append(input("이름을 입력하세요 : "))
                 score=0
-                n+=1
+                #n+=1
                 running=False
 
         # 5. 화면 그리기
@@ -337,7 +351,7 @@ def Level1():
             ranking.append(score)
             ranking.append(input("이름을 입력하세요 : "))
             score=0
-            n+=1
+            #n+=1
             shot=1
             running=False
         
@@ -357,7 +371,6 @@ def Level2():
     global level
     global score
     global ranking
-    global rankingname
     global n
     global shot
 
@@ -377,7 +390,7 @@ def Level2():
     character_to_x_RIGHT=0
     character_speed=7
 
-    weapon = pygame.image.load(os.path.join(image_path,"weapon.jpg"))
+    weapon = pygame.image.load(os.path.join(image_path,"weapon2.png"))
     weapon_size=weapon.get_rect().size
     weapon_width=weapon_size[0]
 
@@ -385,13 +398,26 @@ def Level2():
 
     weapon_speed = 10
 
-    ball_images = [
-    pygame.image.load(os.path.join(image_path, "ball1_2.png")),
-    pygame.image.load(os.path.join(image_path, "ball2_2.png")),
-    pygame.image.load(os.path.join(image_path, "ball3_2.png")),
-    pygame.image.load(os.path.join(image_path, "ball4_2.png"))]
+    # 공 만들기 (4개 크기에 대해 따로 처리)
+    ball_size1 = ["balloon1.png", "green_ball1.png", "blue_ball1.png", "yellow_ball1.png", "purple_ball1.png"]
+    ball_size2 = ["balloon2.png", "green_ball2.png", "blue_ball2.png", "yellow_ball2.png", "purple_ball2.png"]
+    ball_size3 = ["balloon3.png", "green_ball3.png", "blue_ball3.png", "yellow_ball3.png", "purple_ball3.png"]
+    ball_size4 = ["balloon4.png", "green_ball4.png", "blue_ball4.png", "yellow_ball4.png", "purple_ball4.png"]
 
-    ball_speed_y=[-18,-15,-12,-9]
+    choiceBall1 = random.choice(ball_size1)
+    choiceBall2 = random.choice(ball_size2)
+    choiceBall3 = random.choice(ball_size3)
+    choiceBall4 = random.choice(ball_size4)
+
+    # 공 크기별 랜덤 이미지 적용
+    ball_images = [
+        pygame.image.load(os.path.join(image_path,  choiceBall1)),
+        pygame.image.load(os.path.join(image_path,  choiceBall2)),
+        pygame.image.load(os.path.join(image_path,  choiceBall3)),
+        pygame.image.load(os.path.join(image_path,  choiceBall4))
+    ]
+
+    ball_speed_y=[-14,-13,-12,-9]
 
     balls=[]
 
@@ -428,7 +454,7 @@ def Level2():
                 elif event.key == pygame.K_RIGHT:
                     character_to_x_RIGHT+=character_speed
                 elif event.key == pygame.K_SPACE:
-                    att_sound = pygame.mixer.Sound("C:/Users/Administrator/Desktop/Pang_Game/attack.mp3")
+                    att_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/attack.mp3")
                     att_sound.play()
                     if len(weapons) <shot:
                         weapon_x_pos=character_x_pos+(character_width/2)-(weapon_width/2)
@@ -475,29 +501,6 @@ def Level2():
             ball_val["pos_x"] += ball_val["to_x"]
             ball_val["pos_y"] += ball_val["to_y"]
 
-        for ball_idx,ball_val in enumerate(balls):
-            ball_pos_x = ball_val["pos_x"]
-            ball_pos_y = ball_val["pos_y"]
-            ball_img_idx = ball_val["img_idx"]
-
-            ball_size=ball_images[ball_img_idx].get_rect().size
-            ball_width=ball_size[0]
-            ball_height=ball_size[1]
-
-            if ball_pos_x <=0 or ball_pos_x > screen_width - ball_width:
-                ball_val["to_x"]=ball_val["to_x"]*-1
-                
-            if ball_pos_y>=screen_height-stage_height-ball_height:
-                ball_val["to_y"]=ball_val["init_spd_y"]
-
-            else:
-                ball_val["to_y"] +=0.5
-
-            ball_val["pos_x"] += ball_val["to_x"]
-            ball_val["pos_y"] += ball_val["to_y"]
-
-
-
         character_rect=character.get_rect()
         character_rect.left=character_x_pos
         character_rect.top=character_y_pos
@@ -528,7 +531,7 @@ def Level2():
                     ranking.append(score)
                     ranking.append(input("이름을 입력하세요 : "))
                     score=0
-                    n+=1
+                    #n+=1
                     shot=1
                     running =False
                     break
@@ -542,6 +545,8 @@ def Level2():
                 weapon_rect.top=weapon_y_pos
 
                 if weapon_rect.colliderect(ball_rect):
+                    pang_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/pang.mp3")
+                    pang_sound.play()
                     if ball_img_idx==3:
                             score+=45
                     weapon_to_remove=weapon_idx
@@ -594,6 +599,8 @@ def Level2():
 
         if len(balls)==0:
             if level<4:
+                success_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/success.mp3")
+                success_sound.play()
                 game_result="Next Level"
                 msg=game_font.render(game_result,True,(255,255,0))
                 msg_rect=msg.get_rect(center=(int(screen_width/2),int(screen_height/2)))
@@ -615,7 +622,7 @@ def Level2():
                 ranking.append("***"+str(score)+"***")
                 ranking.append(input("이름을 입력하세요 : "))
                 score=0
-                n+=1
+                #n+=1
                 shot=1
                 running=False
 
@@ -653,7 +660,7 @@ def Level2():
             ranking.append(input("이름을 입력하세요 : "))
             score=0
             shot=1
-            n+=1
+            #n+=1
             running=False
         
         pygame.display.update()
@@ -673,13 +680,11 @@ def Level3():
     global level
     global score
     global ranking
-    global rankingname
     global n
     global shot
     global shield
-    global bomb
 
-    background=pygame.image.load(os.path.join(image_path,"background.jpg"))
+    background=pygame.image.load(os.path.join(image_path,"background3.png"))
     stage=pygame.image.load(os.path.join(image_path,"stage.png"))
     stage_size=stage.get_rect().size
     stage_height=stage_size[1]
@@ -695,7 +700,7 @@ def Level3():
     character_to_x_RIGHT=0
     character_speed=7
 
-    weapon = pygame.image.load(os.path.join(image_path,"weapon.jpg"))
+    weapon = pygame.image.load(os.path.join(image_path,"weapon3.png"))
     weapon_size=weapon.get_rect().size
     weapon_width=weapon_size[0]
 
@@ -703,11 +708,24 @@ def Level3():
 
     weapon_speed = 10
 
+    # 공 만들기 (4개 크기에 대해 따로 처리)
+    ball_size1 = ["balloon1.png", "green_ball1.png", "blue_ball1.png", "yellow_ball1.png", "purple_ball1.png"]
+    ball_size2 = ["balloon2.png", "green_ball2.png", "blue_ball2.png", "yellow_ball2.png", "purple_ball2.png"]
+    ball_size3 = ["balloon3.png", "green_ball3.png", "blue_ball3.png", "yellow_ball3.png", "purple_ball3.png"]
+    ball_size4 = ["balloon4.png", "green_ball4.png", "blue_ball4.png", "yellow_ball4.png", "purple_ball4.png"]
+
+    choiceBall1 = random.choice(ball_size1)
+    choiceBall2 = random.choice(ball_size2)
+    choiceBall3 = random.choice(ball_size3)
+    choiceBall4 = random.choice(ball_size4)
+
+    # 공 크기별 랜덤 이미지 적용
     ball_images = [
-    pygame.image.load(os.path.join(image_path, "ball1_3.png")),
-    pygame.image.load(os.path.join(image_path, "ball2_3.png")),
-    pygame.image.load(os.path.join(image_path, "ball3_3.png")),
-    pygame.image.load(os.path.join(image_path, "ball3_3.png"))]
+        pygame.image.load(os.path.join(image_path,  choiceBall1)),
+        pygame.image.load(os.path.join(image_path,  choiceBall2)),
+        pygame.image.load(os.path.join(image_path,  choiceBall3)),
+        pygame.image.load(os.path.join(image_path,  choiceBall4))
+    ]
 
     ball_speed_y=[-18,-15,-12,-9]
 
@@ -756,7 +774,7 @@ def Level3():
                 elif event.key == pygame.K_RIGHT:
                     character_to_x_RIGHT+=character_speed
                 elif event.key == pygame.K_SPACE:
-                    att_sound = pygame.mixer.Sound("C:/Users/Administrator/Desktop/Pang_Game/attack.mp3")
+                    att_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/attack.mp3")
                     att_sound.play()
                     if len(weapons) <shot:
                         weapon_x_pos=character_x_pos+(character_width/2)-(weapon_width/2)
@@ -840,6 +858,8 @@ def Level3():
         
 
             if character_rect.colliderect(ball_rect):
+                fail_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/fail_pang.mp3")
+                fail_sound.play()
                 if shield==1:
                     game_result="Try Again!"
                     msg=game_font.render(game_result,True,(255,255,0))
@@ -855,7 +875,7 @@ def Level3():
                     ranking.append(score)
                     ranking.append(input("이름을 입력하세요 : "))
                     score=0
-                    n+=1
+                    #n+=1
                     shot=1
                     running =False
                     break
@@ -870,6 +890,8 @@ def Level3():
                 weapon_rect.top=weapon_y_pos
 
                 if weapon_rect.colliderect(ball_rect):
+                    pang_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/pang.mp3")
+                    pang_sound.play()
                     if ball_img_idx==3:
                             score+=40
                     weapon_to_remove=weapon_idx
@@ -939,7 +961,7 @@ def Level3():
                     ranking.append(score)
                     ranking.append(input("이름을 입력하세요 : "))
                     score=0
-                    n+=1
+                    #n+=1
                     shot=1
                     running =False
                     break
@@ -954,6 +976,8 @@ def Level3():
                 weapon_rect.top=weapon_y_pos
 
                 if weapon_rect.colliderect(ball2_1_rect):
+                    pang_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/pang.mp3")
+                    pang_sound.play()
                     if ball2_1_img_idx==3:
                             score+=40
                     weapon_to_remove=weapon_idx
@@ -1009,7 +1033,7 @@ def Level3():
             weapon_to_remove=-1
 
         if len(balls)==0 and len(balls2)==0:
-            if level<4:
+            if level<3:
                 game_result="Next Level"
                 msg=game_font.render(game_result,True,(255,255,0))
                 msg_rect=msg.get_rect(center=(int(screen_width/2),int(screen_height/2)))
@@ -1021,6 +1045,8 @@ def Level3():
                 running=False
 
             else:
+                success_sound = pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/success.mp3")
+                success_sound.play()
                 game_result="Mission Complete"
                 level=1
                 msg=game_font.render(game_result,True,(255,255,0))
@@ -1032,7 +1058,7 @@ def Level3():
                 ranking.append(input("이름을 입력하세요 : "))
                 score=0
                 shot=1
-                n+=1
+                #n+=1
                 running=False
 
         screen.blit(background,(0,0))
@@ -1074,7 +1100,7 @@ def Level3():
             ranking.append(score)
             ranking.append(input("이름을 입력하세요 : "))
             score=0
-            n+=1
+            #n+=1
             running=False
         
         pygame.display.update()
@@ -1093,7 +1119,7 @@ def shop():
     global shield
     shoprun=True
     while(shoprun):
-        shopvisual=pygame.image.load(os.path.join(image_path,"shop(ex).png"))
+        shopvisual=pygame.image.load(os.path.join(image_path,"shop1.jpg"))
         screen.blit(shopvisual,(0,0))
         pygame.display.update()
         for event in pygame.event.get():
@@ -1126,14 +1152,14 @@ screen_height = 480 # 세로 크기
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # 화면 타이틀 설정
-pygame.display.set_caption("Nado Pang")
+pygame.display.set_caption("Pang Game")
 
 # FPS
 clock = pygame.time.Clock()
 game_result="Game Over"
-mainvisual=pygame.image.load(os.path.join(image_path,"main(ex).png"))
+mainvisual=pygame.image.load(os.path.join(image_path,"main.jpg"))
 
-BGM_sound=pygame.mixer.Sound("C:/Users/Administrator/Desktop/Pang_Game/PangBGM.mp3")
+BGM_sound=pygame.mixer.Sound("C:/Users/User/Documents/카카오톡 받은 파일/새 폴더 (4)/Pang_Game(test)(1)/sounds/PangBGM.mp3")
 BGM_sound.play(-1)
 
 running=True
@@ -1146,7 +1172,7 @@ while running:
             if event.key == ord('s'):
                 level=1
                 score=0
-                n+=1
+                #n+=1
                 game_result=Level1()
                 break
             if event.key == ord('d'):
